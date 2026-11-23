@@ -125,6 +125,14 @@ h1,.west h1,.east h1{color:#151515!important;font:700 clamp(44px,13vw,68px)/.92 
 .stm .acts a,.stm .acts button,.west .stm .acts *,.east .stm .acts *{min-height:52px;border-radius:999px!important;border:1.5px solid #151515!important;background:transparent!important;color:#151515!important;font:600 17px/1 "Barlow Condensed",sans-serif!important;letter-spacing:.12em;text-transform:uppercase}
 .stm .acts .pri,.west .stm .acts .pri,.east .stm .acts .pri{background:#F4BB05!important;border-color:#F4BB05!important}
 .stm .tap{font-size:12px}
+/*gate*/
+.gate-ov{position:fixed;inset:0;z-index:80;background:rgba(17,17,17,.78);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate-c{width:min(100%,400px);background:#EAD8C3;color:#151515;border-radius:18px;padding:26px 22px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.gate-i{font-size:34px}
+.gate-c h2{margin:6px 0 0;font:700 32px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.gate-c p{font:14px/1.55 "Space Mono",monospace;margin:12px 0 18px}
+.gate-b{display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:8px;border-radius:999px;border:1.5px solid #151515;color:#151515;text-decoration:none;font:600 17px/1 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.gate-b.pri{background:#F4BB05;border-color:#F4BB05}
 </style><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@700&display=swap" rel="stylesheet"></head><body data-pid="bach" class="west"><!--bar--><nav class="tbar w"><a class="bk" href="./">← Back</a><div class="sw" aria-label="Ticket"><a href="ticket#bach" class="on">WEST</a><a href="ticket#east" class="">OST</a></div></nav>
 <div class="wrap">
 <h1>Elvira Bach</h1>
@@ -169,4 +177,11 @@ if(v){v.addEventListener("ended",()=>give(true));
  v.addEventListener("timeupdate",()=>{if(v.duration&&v.currentTime/v.duration>=.95)give(true)});
  if(location.hash==="#v"){setTimeout(()=>{v.scrollIntoView({block:"center"});const p=v.play();if(p&&p.catch)p.catch(()=>{})},200)}}
 window.addEventListener("pageshow",e=>{if(e.persisted)draw()});
+}</script><script>/*gate*/{
+let T=null;try{T=JSON.parse(localStorage.getItem('tix2')||'null')}catch(e){}
+const me=document.body.classList.contains('west')?'west':'east',L={west:'West',east:'Ost'};
+if(T&&T.name&&!T.open&&(T.group||T.side)!==me){const g=T.group||T.side,o=document.createElement('div');o.className='gate-ov';
+ o.innerHTML=`<div class="gate-c"><div class="gate-i">⛔</div><h2>Behind the Wall</h2><p>This artist is in the <b>${L[me]}</b>. Your group started in the <b>${L[g]}</b>.<br>It opens after the swap — when the Wall falls. Enter the crossing code in your ticket.</p>
+ <a class="gate-b pri" href="ticket#${g}">← Back to my ticket</a><a class="gate-b" href="ticket#${me}">I have the code</a></div>`;
+ document.body.appendChild(o);document.documentElement.style.overflow='hidden';const v=document.getElementById('v');if(v){v.pause();v.removeAttribute('autoplay')}}
 }</script></body></html>

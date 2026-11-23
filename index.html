@@ -343,7 +343,7 @@ body.home .card span{color:#4a4238;font-family:"Space Mono",monospace;font-size:
 body.home .card em{color:#151515;opacity:.6}
 body.home .tixrow a{min-height:52px;display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif}
 body.home .tixrow .e{background:#939C87;color:#151515}
-</style><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet"></head><body class="home"><!--v4--><!--onboard--><div id="ob" role="dialog" aria-label="Start">
+/*gate*/</style><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet"></head><body class="home"><!--v4--><!--onboard--><div id="ob" role="dialog" aria-label="Start">
 <!--cover3--><section class="obs on" id="ob1"><div class="c2 c3">
  <div class="c3-grid">
   <div class="c3-meta">Berlin<br>Art exhibition<br>1980 — 1989</div>
@@ -380,7 +380,7 @@ document.querySelectorAll('.obside').forEach(b=>b.addEventListener('click',()=>{
  q('obL').textContent='Your name';q('obName').placeholder='Type your name';q('obCL').textContent='Where are you from?';q('obCity').placeholder='City';q('obAL').textContent='Your art';q('obArt').innerHTML=['Painter','Writer','Musician','Photographer','Dancer','Designer'].map((t,i)=>`<button type="button" data-i="${i}">${t}</button>`).join('');art=null;chk();q('obGo').textContent=w?'Get my West ticket →':'Get my East pass →';q('obStep').textContent='About you';step(3)}));
 let art=null;function chk(){q('obGo').disabled=!(q('obName').value.trim()&&art!==null)}q('obName').addEventListener('input',chk);q('obArt').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;art=+b.dataset.i;q('obArt').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));chk()});
 q('obName').addEventListener('keydown',e=>{if(e.key==='Enter'&&!q('obGo').disabled)q('obGo').click()});
-q('obGo').addEventListener('click',()=>{const S={side,name:q('obName').value.trim(),city:q('obCity').value.trim(),art:q('obArt').querySelectorAll('button')[art].textContent,st:{},no:'A '+String(100000+Math.floor(Math.random()*899999))};
+q('obGo').addEventListener('click',()=>{const S={side,group:side,open:false,name:q('obName').value.trim(),city:q('obCity').value.trim(),art:q('obArt').querySelectorAll('button')[art].textContent,st:{},no:'A '+String(100000+Math.floor(Math.random()*899999))};
  try{localStorage.setItem('tix2',JSON.stringify(S));sessionStorage.setItem('kpSession','1')}catch(e){}
  location.href='ticket#'+side});
 }</script><div class="top"><span>Exhibition</span><a href="ticket" style="text-decoration:none">My ticket →</a></div><div class="wrap">
@@ -403,4 +403,9 @@ document.querySelectorAll('.s2-enter').forEach(b=>b.addEventListener('click',()=
 }</script><script>{
 document.querySelectorAll('.c3-side').forEach(b=>b.addEventListener('click',()=>{
  const o=document.querySelector('.obside[data-side="'+b.dataset.pick+'"]');if(o)o.click()}));
+}</script><script>/*gate*/{
+const h=location.hash;if(h==='#start-west'||h==='#start-east'){let T=null;try{T=JSON.parse(localStorage.getItem('tix2')||'null')}catch(e){}
+ const sd=h==='#start-west'?'west':'east';
+ if(T&&T.name){try{sessionStorage.setItem('kpSession','1')}catch(e){}location.replace('ticket#'+(T.group||T.side))}
+ else{setTimeout(()=>{const o=document.querySelector('.obside[data-side="'+sd+'"]');if(o)o.click()},60)}}
 }</script></body></html>

@@ -178,6 +178,16 @@ body.west .perf{--hole:#EAD8C3}body.east .perf{--hole:#EAD8C3}
 .seg button{min-height:48px}
 .act{min-height:52px}
 .wrap{padding-bottom:max(30px,calc(env(safe-area-inset-bottom) + 20px))}
+/*gate*/
+.seg button.lk::after{content:"LOCKED";display:block;font:700 9px/1 "Space Mono",monospace;letter-spacing:.14em;opacity:.7;margin-top:3px}
+.seg button.lk{opacity:.75}
+.rdy .card.gate{text-align:center}
+.gate-ico{font-size:34px;line-height:1;margin-bottom:6px}
+.gate p{font:14px/1.55 "Space Mono",monospace!important;margin:10px 0 14px}
+.rdy .card.fall{background:#151515!important;color:#EAD8C3!important;text-align:center;animation:fallin .6s cubic-bezier(.2,1.4,.4,1)}.fall-d{font:700 15px "Space Mono",monospace;letter-spacing:.3em;color:#F4BB05;margin-bottom:8px}.rdy .card.fall h2{font:700 40px/1 "Barlow Condensed",sans-serif!important;color:#EAD8C3;text-transform:uppercase}.rdy .card.fall p{color:#EAD8C3}@keyframes fallin{from{transform:scale(.85) rotate(-3deg);opacity:0}}
+#gcode{width:100%;min-height:52px;text-align:center;font:500 30px "Caveat",cursive;letter-spacing:.2em;border:0;border-bottom:2px solid #151515;background:transparent;color:#151515;margin-bottom:12px}
+.gerr{color:#c0392b!important;font-weight:700}
+.shake{animation:gsh .35s}@keyframes gsh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 </style><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="west"><div class="page">
@@ -233,6 +243,19 @@ const save=()=>{try{localStorage.setItem('tix2',JSON.stringify(S))}catch(e){}};
 let hl=null;
 function fromHash(){const h=location.hash.slice(1);if(h==='west'||h==='east'){S.side=h;hl=null}else{for(const k in A){if(A[k].some(a=>a.id===h)){S.side=k;hl=h}}}}
 fromHash();
+const CROSS='1989';S.group=S.group||S.side;
+const locked=s=>!S.open&&S.group&&s!==S.group;
+function askCode(to){const m=$('#rdy'),w=S.group==='west',L={west:'West',east:'Ost'};
+ m.innerHTML=`<div class="card ${w?'w':'e'} gate"><div class="gate-ico">⛔</div><h2>The Wall is closed</h2>
+ <p>Your group started in the <b>${L[S.group]}</b>. The ${L[to]} opens when the groups swap.<br>Then the team gives you the crossing code.</p>
+ <input id="gcode" inputmode="numeric" autocomplete="off" placeholder="Crossing code" aria-label="Crossing code">
+ <p class="gerr" id="gerr" hidden>Wrong code — wait for the swap.</p>
+ <div class="acts"><button class="act go" id="gok">Cross the Wall →</button><button class="act end" data-stay>Not yet</button></div></div>`;
+ m.hidden=false;const i=$('#gcode');setTimeout(()=>i.focus(),50);
+ const ok=()=>{if(i.value.trim().toLowerCase()===CROSS.toLowerCase()){S.open=true;save();m.innerHTML=`<div class="card fall"><div class="fall-d">9 · 11 · 1989</div><h2>The Wall has fallen</h2><p>On the night of 9 November 1989 the border opened. People climbed the Wall, crossed freely and hugged strangers from the other side.<br><b>Now it is your turn.</b></p><div class="acts"><button class="act go" id="fgo">Enter the ${L[to]} →</button></div></div>`;$('#fgo').onclick=()=>{m.hidden=true;_setSide(to);window.scrollTo(0,0)}}
+  else{$('#gerr').hidden=false;i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake')}};
+ $('#gok').onclick=ok;i.onkeydown=e=>{if(e.key==='Enter')ok()};}
+let pend=null;if(locked(S.side)){pend=S.side;S.side=S.group;hl=null}
 
 function rough(r,seed){let p='',x=seed;for(let i=0;i<72;i++){x=(x*9301+49297)%233280;const rr=r+(x/233280-.5)*4,a=i/72*Math.PI*2;p+=(i?'L':'M')+(rr*Math.cos(a)).toFixed(1)+' '+(rr*Math.sin(a)).toFixed(1)}return p+'Z'}
 function stamp(side,ini){
@@ -265,12 +288,13 @@ function render(){
  $('#W').hidden=!w;$('#E').hidden=w;
  $('#seg').classList.toggle('isE',!w);
  $('#tW').classList.toggle('on',w);$('#tE').classList.toggle('on',!w);
- $('#tW').setAttribute('aria-selected',w);$('#tE').setAttribute('aria-selected',!w);
+ $('#tW').classList.toggle('lk',locked('west'));$('#tE').classList.toggle('lk',locked('east')); $('#tW').setAttribute('aria-selected',w);$('#tE').setAttribute('aria-selected',!w);
  document.body.className=w?'west':'east';
  $('#topArt').setAttribute('href','./#'+(w?'west':'east'));
  rows('west');rows('east');ready();A.west.concat(A.east).forEach(a=>{if(S.st[a.id])S.seen[a.id]=true});save();
 }
-function setSide(s){if(s===S.side)return;S.side=s;hl=null;save();try{history.replaceState(null,'','#'+s)}catch(e){}render()}
+function setSide(s){if(locked(s)){askCode(s);return}_setSide(s)}
+function _setSide(s){if(s===S.side)return;S.side=s;hl=null;save();try{history.replaceState(null,'','#'+s)}catch(e){}render()}
 window.addEventListener('hashchange',()=>{fromHash();render()});
 $('#tW').addEventListener('click',()=>setSide('west'));
 $('#tE').addEventListener('click',()=>setSide('east'));
@@ -286,7 +310,7 @@ $('#noW').textContent='№ '+S.no;$('#noE').textContent='№ '+S.no;
 let x0=null;
 document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
 document.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>70)setSide(dx<0?'east':'west');x0=null});
-render();
+render();if(pend)setTimeout(()=>askCode(pend),300);
 window.addEventListener('pageshow',e=>{if(e.persisted){try{const r=JSON.parse(localStorage.getItem('tix2')||'null');if(r)S=Object.assign(S,r)}catch(x){}render()}});
 }
 </script>
