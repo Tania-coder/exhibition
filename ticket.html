@@ -241,6 +241,26 @@ body.west .perf{--hole:#EAD8C3}body.east .perf{--hole:#EAD8C3}
 .ag-w .ag-go span{box-shadow:inset 0 -3px 0 #93A47C;padding-bottom:6px}
 .ag-go:focus-visible,.bc-btn:focus-visible{outline:3px solid #F4BB05;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.bc,.ag,.ag-e .ag-stamp{animation:none}}
+/*bc-codebox*/
+.bc .bc-st.dir{top:-56px;right:0;padding:5px 12px 4px;font-size:21px;letter-spacing:.02em;border-width:3px;outline:0;border-radius:7px;transform:rotate(-8deg);opacity:.9}
+.bc-west .bc-st.dir{color:#E8397F;border-color:#E8397F}.bc-east .bc-st.dir{color:#6F8659;border-color:#6F8659}
+.bc-t.one{margin:62px 0 18px;align-items:center}
+.bc-t.one i{height:46px}
+.bc-t.one h2{font-size:clamp(28px,8.7vw,37px);line-height:1;white-space:nowrap}
+.bc p.ctr{text-align:center;font-size:13.5px;line-height:1.75;margin:0 0 22px}
+.bc-code{position:relative;display:flex;justify-content:space-evenly;align-items:flex-end;height:76px;padding:0 18px 22px;background:rgba(120,95,60,.09);border-radius:4px;cursor:text}
+.bc-code::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:2px}
+.bc-west .bc-code::before{background:#F2559A}.bc-east .bc-code::before{background:#93A47C}
+.bc-code b{position:relative;width:46px;height:40px;display:flex;align-items:flex-end;justify-content:center;font:700 32px/1 "Space Mono",monospace;color:#151515;padding-bottom:8px;border-bottom:3px solid #151515}
+.bc-code b.on{border-bottom-color:#F4BB05}
+.bc-code b.on::after{content:"";position:absolute;bottom:10px;width:2px;height:26px;background:#151515;animation:blk 1s steps(1) infinite}
+.bc-code b.on:not(:empty)::after{display:none}
+@keyframes blk{50%{opacity:0}}
+.bc-code #gcode{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;font-size:16px;color:transparent;background:transparent;caret-color:transparent}
+.bc-code:has(#gcode.shake){animation:bcshk .4s}
+@keyframes bcshk{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.bc-code+.gerr{text-align:center}
+.bc-code+.gerr+.bc-btn,.bc-code+.gerr[hidden]+.bc-btn{margin-top:22px}
 </style><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="west"><div class="page">
@@ -300,12 +320,12 @@ const CROSS='1989';S.group=S.group||S.side;
 const locked=s=>!S.open&&S.group&&s!==S.group;
 function askCode(to){const m=$('#rdy'),g=S.group,L={west:'West',east:'Ost'},no=String(S.no||'').replace(/^A\s*/,'').slice(-4);
  m.innerHTML=`<div class="bc bc-${g}" role="dialog" aria-label="The Wall is closed"><header class="bc-h"><span class="bc-tab">${g==='west'?'WEST':'OST'}</span><span class="bc-ttl">Künstlerpass /<br>Border control</span><span class="bc-no">№ ${no}</span></header><div class="bc-rule"></div>
- <div class="bc-b"><div class="bc-t"><i></i><h2>The Wall<br>is closed</h2><span class="bc-st">Access<br>restricted</span></div>
- <p>The <b>${L[to]}</b> is behind the Wall.<br>Your journey began in the <b>${L[g]}</b>.</p><p>Access opens after the Wall falls. Enter the crossing code to continue.</p>
- <input id="gcode" inputmode="numeric" autocomplete="off" placeholder="CROSSING CODE" aria-label="Crossing code" maxlength="8">
+ <div class="bc-b"><div class="bc-t one"><i></i><h2>The Wall is closed</h2><span class="bc-st dir">${g==='west'?'West → Ost':'Ost → West'}</span></div>
+ <p class="ctr">Your group started in the <b>${L[g]}</b>.<br>The <b>${L[to]}</b> opens when the groups swap.<br>Then enter the crossing code.</p>
+ <label class="bc-code"><b class="on"></b><b></b><b></b><b></b><input id="gcode" inputmode="numeric" autocomplete="one-time-code" maxlength="4" aria-label="Crossing code"></label>
  <p class="gerr" id="gerr" hidden>Wrong code — wait for the swap.</p>
  <button class="bc-btn pri" id="gok">Cross the Wall <svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h23M18 1l6 6-6 6"/></svg></button><button class="bc-btn" data-stay><svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 7H2M8 1 2 7l6 6"/></svg> Back to my ticket</button></div></div>`;
- m.hidden=false;const i=$('#gcode');setTimeout(()=>i.focus(),60);
+ m.hidden=false;const i=$('#gcode');{const sl=[...m.querySelectorAll('.bc-code b')];i.oninput=()=>{i.value=i.value.replace(/\D/g,'').slice(0,4);sl.forEach((b,k)=>{b.textContent=i.value[k]||'';b.classList.toggle('on',k===Math.min(i.value.length,3))});$('#gerr').hidden=true}}setTimeout(()=>i.focus(),60);
  const ok=()=>{if(i.value.trim().toLowerCase()!==CROSS.toLowerCase()){$('#gerr').hidden=false;i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake');return}
   S.open=true;save();
   m.innerHTML=to==='east'
