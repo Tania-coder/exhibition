@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket — Exhibition</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Courier+Prime:wght@400;700&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"SE";src:url(SpecialElite.ttf)}
+@font-face{font-family:"BC";src:url(BarlowCondSB.ttf);font-weight:600}
+@font-face{font-family:"BC";src:url(BarlowCond.ttf);font-weight:400}
+/* VOICE: two plain tickets, one per side of the Wall.
+   IDEA: a West ticket and an East Passierschein you flip between.
+   PICTURE: the ticket itself, full width, with stamp slots.
+   COLOUR and TYPE: West pink/yellow + Permanent Marker/Space Mono; East beige/olive + Barlow Condensed/Special Elite; stamp red.
+   LAYOUT: switch on top, one ticket below, nothing else. */
+:root{color-scheme:light;--pink:#FF4FA3;--yel:#FFD400;--blk:#111;--paper:#F4EFE6;--sage:#9AA593;--beige:#E8E1CC;--olive:#2F3A2E;--red:#C2272D;--wall:#C9C3B6}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;min-height:100vh;font:16px/1.5 "Space Mono",monospace;color:var(--blk);background:#1a1a1a;transition:background .4s;overflow-x:clip}
+body.west{background:#2a1622}body.east{background:#1c211c}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+.wrap{max-width:460px;margin:0 auto;padding:20px 16px 40px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#000;border-radius:999px;padding:5px;position:relative;margin-bottom:20px}
+.seg button{position:relative;z-index:1;min-height:48px;border-radius:999px;color:#ddd;font:700 15px/1 "Space Mono";letter-spacing:.12em;transition:color .3s}
+.seg .knob{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:999px;background:var(--pink);transition:transform .35s cubic-bezier(.5,0,.2,1),background .35s}
+.seg.isE .knob{transform:translateX(100%);background:var(--beige)}
+.seg button.on{color:var(--blk)}
+.stage{perspective:1400px}
+.ticket{border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:flip .5s cubic-bezier(.3,.7,.3,1)}
+@keyframes flip{from{transform:rotateY(-80deg);opacity:0}}
+.ticket[hidden]{display:none}
+/* perforation */
+.perf{height:22px;position:relative;background:inherit}
+.perf::before{content:"";position:absolute;left:14px;right:14px;top:10px;border-top:2px dashed currentColor;opacity:.5}
+.perf::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0 50%,var(--hole) 11px,transparent 12px),radial-gradient(circle at 100% 50%,var(--hole) 11px,transparent 12px)}
+body.west .perf{--hole:#2a1622}body.east .perf{--hole:#1c211c}
+.head{padding:20px 20px 16px;position:relative}
+.no{position:absolute;right:18px;top:18px;font:700 14px "Courier Prime";color:var(--red)}
+.body{padding:6px 20px 22px}
+label{display:block;font:600 12px/1.2 "Barlow Condensed";letter-spacing:.14em;text-transform:uppercase;margin:14px 0 2px;opacity:.8}
+input{width:100%;font:700 18px "Courier Prime";padding:6px 0;border:0;border-bottom:1.5px solid currentColor;background:transparent;color:inherit}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.val{font:700 18px "Courier Prime";border-bottom:1.5px solid currentColor;padding:6px 0}
+.rows{margin-top:18px;display:grid;gap:10px}
+.row{display:grid;grid-template-columns:1fr 74px;gap:12px;align-items:center;padding:10px 12px;border:1.5px solid currentColor;border-radius:8px;min-height:92px}
+.row .n{font-size:20px;line-height:1.1}
+.row .t{font-size:12px;opacity:.75}
+.slot{width:74px;height:74px;border:1.5px dashed currentColor;border-radius:50%;display:grid;place-items:center;font-size:10px;text-align:center;line-height:1.1;position:relative}
+.slot svg{position:absolute;inset:-6px;width:86px;height:86px}
+.slot.new svg{animation:slam .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes slam{0%{transform:scale(2.4) rotate(-20deg);opacity:0}60%{opacity:1}}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:12px}
+.foot button{text-decoration:underline;padding:10px 0;font-size:12px}
+
+/* WEST ticket */
+.w{background:var(--pink);color:var(--blk)}
+.w .head{background:var(--pink);overflow:hidden}
+.w .head::before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:var(--yel);right:-50px;top:-70px}
+.w h1{font:52px/1 "Permanent Marker";margin:0;position:relative;transform:rotate(-3deg)}
+.w .sub{position:relative;font-size:12px;font-weight:700;letter-spacing:.2em;margin-top:6px}
+.w .no{z-index:1}
+.w .body{background:var(--paper)}
+.w .row{background:#fff}
+.w .row .n{font-family:"Permanent Marker"}
+
+/* EAST ticket */
+.e{background:var(--beige) repeating-linear-gradient(0deg,transparent 0 9px,rgba(154,165,147,.35) 9px 10px);color:var(--olive)}
+.e .head{border-bottom:2px solid var(--olive)}
+.e .no{top:auto;bottom:14px}
+.e h1{font:700 42px/1 "Barlow Condensed";letter-spacing:.16em;margin:0}
+.e .sub{font:600 12px "Barlow Condensed";letter-spacing:.18em;margin-top:6px;text-transform:uppercase}
+.e .t,.e .hint{font-family:"Special Elite"}
+.e .row{border-radius:2px;background:rgba(255,255,255,.45)}
+.e .row .n{font:700 22px "Barlow Condensed";letter-spacing:.04em}
+.e .slot{border-radius:4px}
+.e .body{position:relative;padding-left:30px}
+.e .body::before{content:"";position:absolute;left:14px;top:14px;bottom:22px;width:5px;background:var(--red)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;font:600 15px/1 "BC","Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#9a9a92;border-bottom:1px solid #2a2a28}
+.top a{text-decoration:none;color:inherit;padding:6px 0}
+.top .home{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 16px;border-radius:999px;border:1.5px solid currentColor;color:#f2f2ee}
+body.west .top .home{border-color:var(--pink);color:var(--pink)}
+body.east .top .home{border-color:var(--beige);color:var(--beige);border-radius:3px}
+.top .home:hover{background:rgba(255,255,255,.08)}
+.row a.n{color:inherit;text-decoration:none;display:block}
+.row a.n::after{content:" →";font-size:14px;opacity:.6}
+.row.hl{box-shadow:0 0 0 3px var(--yel)}
+.e .row.hl{box-shadow:0 0 0 3px var(--red)}
+.acts{display:grid;gap:10px;margin-top:20px}
+.act{display:flex;align-items:center;justify-content:center;min-height:54px;padding:12px 16px;text-decoration:none;cursor:pointer;width:100%}
+.w .act.go{background:#111;color:var(--yel);border-radius:999px;font:700 15px "Space Mono";letter-spacing:.06em}
+.w .act.end{background:transparent;color:#111;border:2px solid #111;border-radius:999px;font:20px "Permanent Marker"}
+.e .act.go{background:var(--olive);color:var(--beige);border-radius:3px;font:700 19px "Barlow Condensed";letter-spacing:.16em}
+.e .act.end{background:transparent;color:var(--red);border:2px solid var(--red);border-radius:3px;font:700 17px "Barlow Condensed";letter-spacing:.16em}
+.rdy{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72)}
+.rdy[hidden]{display:none}
+.rdy .card{width:min(100%,400px);padding:24px 20px;text-align:center}
+.rdy .card.w{background:var(--yel);color:#111;border:3px solid #111;border-radius:16px}
+.rdy .card.w h2{font:34px/1.05 "Permanent Marker";margin:0}
+.rdy .card.e{background:var(--beige);color:var(--olive);border-left:8px solid var(--red);border-radius:3px}
+.rdy .card.e h2{font:700 30px/1.1 "Barlow Condensed";letter-spacing:.12em;margin:0}
+.rdy p{font-size:14px;margin:10px 0 14px}
+.rdy .card.e p{font-family:"Special Elite"}
+.rdy .sts{display:flex;justify-content:center;gap:4px;margin-bottom:12px}
+.rdy .sts svg{width:76px;height:76px}
+.rdy .acts{margin-top:0}
+.rdy .card.w .act.go{background:#111;color:var(--yel);border-radius:999px;font:700 15px "Space Mono"}
+.rdy .card.w .act.end{border:2px solid #111;border-radius:999px;font:700 14px "Space Mono";background:transparent}
+.rdy .card.e .act.go{background:var(--olive);color:var(--beige);border-radius:3px;font:700 19px "Barlow Condensed";letter-spacing:.14em}
+.rdy .card.e .act.end{border:1.5px solid var(--olive);border-radius:3px;font:700 17px "Barlow Condensed";letter-spacing:.12em;background:transparent;color:var(--olive)}
+.hint{color:#ccc;font-size:12px;text-align:center;margin-top:16px;line-height:1.6}
+a.slot{text-decoration:none;color:inherit}
+.slot.soon{opacity:.5}
+.howto{font-size:12px;line-height:1.5;margin:14px 0 0;padding:10px 12px;border-radius:8px;background:rgba(0,0,0,.05)}
+.e .howto{font-family:"Special Elite";border-radius:2px}
+.done{margin-top:16px;padding:16px;border-radius:10px;text-align:center}
+.done[hidden]{display:none}
+.done b{display:block;font-size:22px}
+.done span{display:block;font-size:13px;margin:4px 0 12px}
+.w .done{background:var(--yel);border:2px solid #111}.w .done b{font-family:"Permanent Marker"}
+.e .done{background:var(--olive);color:var(--beige);border-radius:3px}.e .done b{font:700 24px "Barlow Condensed";letter-spacing:.14em}.e .done span{font-family:"Special Elite"}
+.e .done .act.go{background:var(--beige);color:var(--olive)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/*paper-style*/
+body,body.west,body.east{background:#111;color:#151515;font-family:"Space Mono",monospace}
+.page{width:min(100%,860px,calc((100vh - 40px) * .74));width:min(100%,860px,calc((100svh - 40px) * .74));margin:0 auto;background:#EAD8C3;min-height:100vh;min-height:100svh;container-type:inline-size}
+@media(min-width:500px){.page{margin:20px auto;min-height:calc(100svh - 40px);border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden}}
+.top{color:#151515;border-bottom:1px solid rgba(21,21,21,.15);font-family:"Barlow Condensed",sans-serif}
+.top .home,body.west .top .home,body.east .top .home{border:1.5px solid #151515;color:#151515;border-radius:999px;background:transparent}
+.wrap{max-width:none;padding:16px clamp(12px,3cqw,26px) 30px}
+.seg{background:#d6c2a8;box-shadow:inset 0 1px 3px rgba(0,0,0,.15)}
+.seg button{color:#5c5246;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:16px;letter-spacing:.2em}
+.seg .knob{background:#ED3D7E}.seg.isE .knob{background:#939C87}
+.seg button.on{color:#151515}
+.ticket{border-radius:14px;box-shadow:0 16px 34px rgba(70,45,20,.35),0 2px 4px rgba(70,45,20,.2);position:relative}
+.ticket::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");mix-blend-mode:multiply;opacity:.3}
+.w,.w .body,.w .head{background:#e1c8ae;color:#2a2620}
+.e,.e .body,.e .head{background:#c3bda6;color:#2a2620}
+.w .head::before,.e .head::before{display:none}
+.head{padding:0!important;position:relative;border:0!important}
+.tk-top{display:block;width:100%;height:auto}
+.tk-sub{position:absolute;left:10%;top:56.5%;font:400 clamp(9px,2.2cqw,14px)/1.55 "Space Mono",monospace;letter-spacing:.2em;color:#2a2620;opacity:.85}
+.head .no{position:absolute;right:14px;top:auto;bottom:14px;z-index:2;background:rgba(255,255,255,.55);border:1.6px solid #c0392b;color:#c0392b;padding:3px 7px;transform:rotate(-4deg);font:700 13px "Courier Prime",monospace}
+body.west .perf{--hole:#EAD8C3}body.east .perf{--hole:#EAD8C3}
+.perf{color:#2a2620}
+.body{padding:10px clamp(14px,3cqw,26px) 22px!important;border-left:0!important}
+.e .body::before{display:none}
+.body label{font:700 9px "Space Mono",monospace;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-top:14px}
+.body input,.body .val{font:500 clamp(20px,4.4cqw,28px)/1.15 "Caveat",cursive!important;color:#2f2b25;border-bottom:1px solid rgba(42,38,32,.3)!important;padding:4px 0 6px}
+.howto{background:rgba(255,255,255,.35)!important;border:1px dashed rgba(42,38,32,.35);border-radius:8px!important;font:400 12.5px/1.55 "Space Mono",monospace!important;color:#2a2620}
+.row{background:rgba(255,255,255,.4)!important;border:1px solid rgba(42,38,32,.25)!important;border-radius:10px!important;box-shadow:none!important}
+.row .n,.w .row .n,.e .row .n{font:700 clamp(20px,4.2cqw,26px)/1.05 "Barlow Condensed",sans-serif!important;letter-spacing:.02em!important;color:#151515!important}
+.row .t{font:400 12px "Space Mono",monospace!important;opacity:.7}
+.slot{border-color:rgba(42,38,32,.45)!important;color:#2a2620}
+.foot{color:#2a2620}
+.act{border-radius:999px!important;font:600 clamp(15px,3.2cqw,20px)/1 "Barlow Condensed",sans-serif!important;letter-spacing:.16em!important;text-transform:uppercase}
+.act.go,.w .act.go,.e .act.go{background:#F4BB05!important;color:#151515!important;box-shadow:0 3px 0 rgba(0,0,0,.2)!important;border:0!important}
+.act.end,.w .act.end,.e .act.end{background:transparent!important;color:#151515!important;border:1.5px solid #151515!important}
+.done,.w .done,.e .done{background:#F4BB05!important;color:#151515!important;border:0!important;border-radius:12px!important}
+.done b,.w .done b,.e .done b{font:700 24px "Barlow Condensed",sans-serif!important;letter-spacing:.12em!important}
+.done span{font-family:"Space Mono",monospace!important}
+.done .act.go{background:#151515!important;color:#F4BB05!important}
+.rdy .card.w,.rdy .card.e{background:#EAD8C3!important;color:#151515!important;border:0!important;border-radius:16px!important;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.rdy .card h2{font:700 30px/1.05 "Barlow Condensed",sans-serif!important;letter-spacing:.04em!important;text-transform:uppercase}
+.rdy p{font-family:"Space Mono",monospace!important}
+.rdy .act.go{background:#F4BB05!important;color:#151515!important}
+.rdy .act.end{border:1.5px solid #151515!important;color:#151515!important;background:transparent!important}
+.hint{color:#6b6153!important}
+/*mobile-pass*/
+.top a,.top .home{min-height:44px;display:inline-flex;align-items:center}
+.top{padding-top:max(8px,env(safe-area-inset-top))}
+.tk-sub{font-size:max(11px,2.2cqw)}
+.body label{font-size:12px!important;letter-spacing:.06em}
+.slot{font-size:11px!important}
+.row .n{display:block;padding:8px 0;min-height:44px}
+.row .t{font-size:12.5px!important}
+.body input{min-height:44px}
+.seg button{min-height:48px}
+.act{min-height:52px}
+.wrap{padding-bottom:max(30px,calc(env(safe-area-inset-bottom) + 20px))}
+</style><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="west"><div class="page">
+<div class="top"><a href="./#west" id="topArt">← All artists</a><a href="./#sides" class="home" aria-label="Home: both sides">⌂ Home</a></div>
+<div class="wrap">
+ <div class="seg" id="seg" role="tablist">
+  <span class="knob"></span>
+  <button role="tab" id="tW" class="on" aria-selected="true">WEST</button>
+  <button role="tab" id="tE" aria-selected="false">OST</button>
+ </div>
+
+ <div class="stage">
+  <article class="ticket w" id="W">
+   <div class="head"><img class="tk-top" src="s2-west-top.png?v=2" alt="WEST · Berlin (West) 1980s"><span class="tk-sub">BERLIN (WEST)<br>1980s</span><span class="no" id="noW"></span></div>
+   <div class="perf"></div>
+   <div class="body">
+    <label for="nmW">Name</label><input id="nmW" data-name maxlength="22" placeholder="Your name" autocomplete="off">
+    <div class="two"><div><label>Date</label><div class="val" data-date></div></div><div><label>Crossing point</label><div class="val">Klassenzimmer</div></div></div>
+    <div class="two"><div><label>From</label><div class="val" data-city></div></div><div><label>Art</label><div class="val" data-art></div></div></div>
+    <p class="howto">Watch each artist’s film to the end → you get their stamp. Reading the story instead? Stamp it yourself at the bottom of the story.</p><div class="rows" id="rowsW"></div>
+    <div class="foot"><span id="cntW"></span></div><div class="done" id="doneW" hidden><b>WEST COMPLETE!</b><span>All stamps collected. Now cross the Wall.</span><button class="act go" data-cross="east">Cross to OST →</button></div>
+    <div class="acts"><a class="act go" href="./#west">Go to the artists →</a><button class="act end" data-end>End session</button></div>
+   </div>
+  </article>
+
+  <article class="ticket e" id="E" hidden>
+   <div class="head"><img class="tk-top" src="s2-east-top.png?v=2" alt="OST · Berlin (Ost) 1980s"><span class="tk-sub">BERLIN (OST)<br>1980s</span><span class="no" id="noE"></span></div>
+   <div class="perf"></div>
+   <div class="body">
+    <label for="nmE">Name</label><input id="nmE" data-name maxlength="22" placeholder="Your name" autocomplete="off">
+    <div class="two"><div><label>Date</label><div class="val" data-date></div></div><div><label>Crossing point</label><div class="val">Klassenzimmer</div></div></div>
+    <div class="two"><div><label>From</label><div class="val" data-city></div></div><div><label>Art</label><div class="val" data-art></div></div></div>
+    <p class="howto">Watch each artist’s film to the end → you get their stamp. Reading the story instead? Stamp it yourself at the bottom of the story.</p><div class="rows" id="rowsE"></div>
+    <div class="foot"><span id="cntE"></span></div><div class="done" id="doneE" hidden><b>SIDE COMPLETE</b><span>All stamps collected. Now cross the Wall.</span><button class="act go" data-cross="west">Cross to West →</button></div>
+    <div class="acts"><a class="act go" href="./#east">Go to the artists →</a><button class="act end" data-end>End session</button></div>
+   </div>
+  </article>
+ </div>
+ <div class="rdy" id="rdy" hidden role="dialog"></div>
+ <p class="hint">Tap an artist to watch the film. Watch it to the end and the stamp lands here by itself.<br>Swipe or use the switch to change ticket.</p>
+</div>
+
+<script>
+{
+const A={
+ west:[{id:'noir',n:'Thierry Noir',t:'Painter · Berlin Wall',i:'TN'},{id:'bach',n:'Elvira Bach',t:'Painter · Berlin',i:'EB'},{id:'fetting',n:'Rainer Fetting',t:'Painter · Berlin / New York',i:'RF'}],
+ east:[{id:'kafka',n:'Franz Kafka',t:'Writer · Prague',i:'FK'},{id:'marquardt',n:'Sven Marquardt',t:'Photographer · East Berlin',i:'SM'},{id:'ciurlionis',n:'M. K. Čiurlionis',t:'Painter, composer · Lithuania',i:'MČ'}]
+};
+const $=s=>document.querySelector(s);
+let S={side:'west',name:'',st:{},no:'A '+String(100000+Math.floor(Math.random()*899999))};
+try{const r=JSON.parse(localStorage.getItem('tix2')||'null');if(r)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem('tix2',JSON.stringify(S))}catch(e){}};
+let hl=null;
+function fromHash(){const h=location.hash.slice(1);if(h==='west'||h==='east'){S.side=h;hl=null}else{for(const k in A){if(A[k].some(a=>a.id===h)){S.side=k;hl=h}}}}
+fromHash();
+
+function rough(r,seed){let p='',x=seed;for(let i=0;i<72;i++){x=(x*9301+49297)%233280;const rr=r+(x/233280-.5)*4,a=i/72*Math.PI*2;p+=(i?'L':'M')+(rr*Math.cos(a)).toFixed(1)+' '+(rr*Math.sin(a)).toFixed(1)}return p+'Z'}
+function stamp(side,ini){
+ if(side==='west')return `<svg viewBox="-100 -100 200 200"><g opacity=".9" transform="rotate(-12)"><path d="${rough(88,7)}" fill="none" stroke="#FF4FA3" stroke-width="8"/><path d="${rough(70,3)}" fill="none" stroke="#FF4FA3" stroke-width="2"/><text y="-36" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="14" fill="#FF4FA3">WEST BERLIN</text><text y="18" text-anchor="middle" font-family="Permanent Marker" font-size="48" fill="#FF4FA3">${ini}</text><text y="50" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="13" fill="#FF4FA3">CHECKED ✓</text></g></svg>`;
+ return `<svg viewBox="-100 -100 200 200"><g opacity=".88" transform="rotate(8)"><rect x="-86" y="-86" width="172" height="172" rx="10" fill="none" stroke="#C2272D" stroke-width="5"/><rect x="-74" y="-74" width="148" height="148" rx="4" fill="none" stroke="#C2272D" stroke-width="1.6"/><text y="-40" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="20" fill="#C2272D" letter-spacing="2">KONTROLLIERT</text><text y="20" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="50" fill="#C2272D">${ini}</text><text y="56" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="17" fill="#C2272D" letter-spacing="2">BERLIN (OST)</text></g></svg>`;
+}
+function rows(side){
+ const el=side==='west'?$('#rowsW'):$('#rowsE');S.seen=S.seen||{};
+ el.innerHTML=A[side].map(a=>{
+  if(a.tbd)return `<div class="row"><div><div class="n">${a.n}</div><div class="t">${a.t}</div></div><div class="slot soon">${'coming<br>soon'}</div></div>`;
+  const st=S.st[a.id],nw=st&&!S.seen[a.id];
+  return `<div class="row ${hl===a.id?'hl':''}"><div><a class="n" href="${a.id}#v">${a.n}</a><div class="t">${a.t}</div></div><a class="slot ${nw?'new':''}" href="${a.id}#v" aria-label="${st?'Stamped':'Watch the film'}: ${a.n}">${st?stamp(side,a.i):('▶ watch<br>to stamp')}</a></div>`}).join('');
+ const av=A[side].filter(a=>!a.tbd),n=av.filter(a=>S.st[a.id]).length;
+ (side==='west'?$('#cntW'):$('#cntE')).textContent=side==='west'?`${n} / ${av.length} stamps`:`${n} / ${av.length} stamps`;
+ (side==='west'?$('#doneW'):$('#doneE')).hidden=n<av.length;
+}
+function full(side){const av=A[side].filter(a=>!a.tbd);return av.every(a=>S.st[a.id])}
+function ready(){
+ const me=S.side,ot=me==='west'?'east':'west';S.rd=S.rd||{};
+ if(!full(me)||S.rd[me]||A[ot].some(a=>S.st[a.id]))return;
+ S.rd[me]=true;const w=me==='west',m=$('#rdy');
+ m.innerHTML=`<div class="card ${w?'w':'e'}"><div class="sts">${A[me].filter(a=>!a.tbd).map(a=>stamp(me,a.i)).join('')}</div>
+ <h2>${'You’re ready to cross to the other side!'}</h2>
+ <p>${w?'All West stamps collected. Your permit for the East is open.':'All East stamps collected. The way to the West is open.'}</p>
+ <div class="acts"><button class="act go" data-cross="${ot}">${w?'Cross to Ost →':'Cross to West →'}</button><button class="act end" data-stay>${'Stay on this side'}</button></div></div>`;
+ m.hidden=false;
+}
+function render(){
+ const w=S.side==='west';
+ $('#W').hidden=!w;$('#E').hidden=w;
+ $('#seg').classList.toggle('isE',!w);
+ $('#tW').classList.toggle('on',w);$('#tE').classList.toggle('on',!w);
+ $('#tW').setAttribute('aria-selected',w);$('#tE').setAttribute('aria-selected',!w);
+ document.body.className=w?'west':'east';
+ $('#topArt').setAttribute('href','./#'+(w?'west':'east'));
+ rows('west');rows('east');ready();A.west.concat(A.east).forEach(a=>{if(S.st[a.id])S.seen[a.id]=true});save();
+}
+function setSide(s){if(s===S.side)return;S.side=s;hl=null;save();try{history.replaceState(null,'','#'+s)}catch(e){}render()}
+window.addEventListener('hashchange',()=>{fromHash();render()});
+$('#tW').addEventListener('click',()=>setSide('west'));
+$('#tE').addEventListener('click',()=>setSide('east'));
+document.addEventListener('click',e=>{
+ if(e.target.closest('[data-stay]')||e.target.id==='rdy'){$('#rdy').hidden=true;return}
+ const c=e.target.closest('[data-cross]');if(c){$('#rdy').hidden=true;setSide(c.dataset.cross);window.scrollTo(0,0);return}
+ if(e.target.closest('[data-end]')){try{localStorage.removeItem('tix2');sessionStorage.removeItem('kpSession')}catch(x){}location.href='./';return}
+});
+document.querySelectorAll('[data-name]').forEach(i=>{i.value=S.name;i.addEventListener('input',()=>{S.name=i.value;document.querySelectorAll('[data-name]').forEach(o=>{if(o!==i)o.value=i.value});save()})});
+const d=new Date().toLocaleDateString('de-DE');document.querySelectorAll('[data-date]').forEach(x=>x.textContent=d);
+document.querySelectorAll('[data-city]').forEach(x=>x.textContent=S.city||'—');document.querySelectorAll('[data-art]').forEach(x=>x.textContent=S.art||'—');
+$('#noW').textContent='№ '+S.no;$('#noE').textContent='№ '+S.no;
+let x0=null;
+document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>70)setSide(dx<0?'east':'west');x0=null});
+render();
+window.addEventListener('pageshow',e=>{if(e.persisted){try{const r=JSON.parse(localStorage.getItem('tix2')||'null');if(r)S=Object.assign(S,r)}catch(x){}render()}});
+}
+</script>
+</div></body>
+</html>

@@ -38,12 +38,135 @@ h1{font:600 clamp(44px,13vw,68px)/.95 "BC",sans-serif;text-transform:uppercase;m
 .home{background:#0b0b0b;color:#f2f2ee;--ac:#c6f500;--mut:#9a9a92;--line:#2a2a28}
 .home .east-sec .card{background:#ebe5d9;color:#1b1a17;--mut:#6d695f;--line:#ebe5d9}
 .home .east-sec .card em{color:#1b1a17}
-</style></head><body class="west"><div class="top"><a href="./">← All artists</a><span>West</span></div>
+.tix{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:30px;padding:16px 18px;border:1.5px solid var(--ac);border-radius:12px;text-decoration:none}.tix span{font:400 14px/1.2 "BC",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}.tix b{display:block;font:600 22px/1.1 "BC",sans-serif;text-transform:uppercase;margin-top:4px}.tix i{font-style:normal;font:600 26px/1 "BC",sans-serif;color:var(--ac)}.west .tix{background:#141414}.east .tix{background:#fff8}.tixrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:34px}.tixrow a{display:block;text-align:center;padding:16px 10px;border-radius:999px;text-decoration:none;font:600 17px/1 "BC",sans-serif;letter-spacing:.12em;text-transform:uppercase}.tixrow .w{background:#FF4FA3;color:#111}.tixrow .e{background:#E8E1CC;color:#2F3A2E}
+.tbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px}
+.tbar a{text-decoration:none}
+.tbar .bk{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
+.tbar .sw{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;min-width:170px}
+.tbar .sw a{display:grid;place-items:center;min-height:38px;padding:0 14px;border-radius:999px;font:700 13px/1 "Space Mono",monospace;letter-spacing:.12em}
+.tbar.w{background:#FF4FA3;color:#111;box-shadow:0 2px 0 #111}
+.tbar.w .bk{font:20px/1 "Permanent Marker",cursive}
+.tbar.w .sw{background:#111}.tbar.w .sw a{color:#ddd}.tbar.w .sw a.on{background:#FFD400;color:#111}
+.tbar.e{background:repeating-linear-gradient(0deg,transparent 0 9px,rgba(154,165,147,.35) 9px 10px) #E8E1CC;color:#2F3A2E;border-bottom:2px solid #2F3A2E;border-left:6px solid #C2272D}
+.tbar.e .bk{font:600 18px/1 "BC",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.tbar.e .sw{background:#2F3A2E;border-radius:4px}.tbar.e .sw a{color:#E8E1CC;border-radius:2px;font-family:"BC",sans-serif;font-size:15px}.tbar.e .sw a.on{background:#E8E1CC;color:#2F3A2E}
+
+.sb{margin-top:30px;padding:20px;border:1.5px solid var(--ac);border-radius:12px;text-align:center;position:relative}
+.west .sb{background:#141414}.east .sb{background:#fff8;border-radius:3px;border-left:6px solid #C2272D}
+.sb h3{margin:0;font:600 15px/1 "BC",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.sb p{margin:10px 0 0;font-size:15px}
+.east .sb p{font-family:"SE","Courier New",monospace}
+.sb .or{color:var(--mut);font-size:13px;margin-top:16px}
+.sb .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin-top:10px;padding:12px;border:0;cursor:pointer;text-decoration:none}
+.west .sb .btn{border-radius:999px;background:#FF4FA3;color:#111;font:20px/1 "Permanent Marker",cursive}
+.west .sb .btn.ghost{background:transparent;color:#FFD400;border:2px solid #FFD400;font:700 14px "Space Mono",monospace;letter-spacing:.06em}
+.east .sb .btn{border-radius:3px;background:#2F3A2E;color:#E8E1CC;font:600 19px/1 "BC",sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.east .sb .btn.ghost{background:transparent;color:#C2272D;border:2px solid #C2272D}
+.sb .st{width:150px;height:150px;margin:6px auto 0;display:block}
+.sb.done .st{animation:slam .55s cubic-bezier(.2,1.6,.4,1)}
+.slamfx{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(0,0,0,.55);pointer-events:none;animation:fx 1.8s forwards}
+.slamfx svg{width:min(70vw,300px);height:auto;animation:slam .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes slam{0%{transform:scale(2.6) rotate(-25deg);opacity:0}60%{opacity:1}}
+@keyframes fx{0%,75%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.sb .st,.slamfx,.slamfx svg{animation:none}}
+
+.stm{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);animation:stmIn .25s ease}
+@keyframes stmIn{from{opacity:0}}
+.stm .stc{width:min(100%,400px);padding:22px 20px 20px;text-align:center;border-radius:16px}
+.west .stm .stc{background:#F4EFE6;color:#111;border:3px solid #111}
+.east .stm .stc{background:#E8E1CC;color:#2F3A2E;border-radius:3px;border-left:8px solid #C2272D}
+.stm svg{width:170px;height:170px;display:block;margin:0 auto;animation:slam .55s cubic-bezier(.2,1.6,.4,1)}
+.stm h2{margin:6px 0 0;font:34px/1 "Permanent Marker",cursive}
+.east .stm h2{font:600 34px/1 "BC",sans-serif;letter-spacing:.14em}
+.stm p{margin:8px 0 16px;font-size:15px}
+.east .stm p{font-family:"SE","Courier New",monospace}
+.stm .ready{margin:0 0 14px;padding:12px;font-weight:700;font-size:15px}
+.west .stm .ready{background:#FFD400;border:2px solid #111;border-radius:10px}
+.east .stm .ready{background:#2F3A2E;color:#E8E1CC;font-family:"BC",sans-serif;letter-spacing:.1em;font-size:17px;text-transform:uppercase}
+.stm .acts{display:grid;gap:8px}
+.stm .acts a,.stm .acts button{display:flex;align-items:center;justify-content:center;min-height:50px;padding:10px;cursor:pointer;text-decoration:none;font:700 14px "Space Mono",monospace;letter-spacing:.04em}
+.west .stm .acts *{border-radius:999px;border:2px solid #111;background:#fff;color:#111}
+.west .stm .acts .pri{background:#111;color:#FFD400}
+.east .stm .acts *{border-radius:3px;border:1.5px solid #2F3A2E;background:transparent;color:#2F3A2E;font:600 17px "BC",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.east .stm .acts .pri{background:#2F3A2E;color:#E8E1CC}
+.stm .tap{margin-top:12px;font-size:12px;opacity:.6}
+.tix{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:30px;padding:16px 18px;border:1.5px solid var(--ac);border-radius:12px;text-decoration:none}.tix span{font:400 14px/1.2 "BC",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}.tix b{display:block;font:600 22px/1.1 "BC",sans-serif;text-transform:uppercase;margin-top:4px}.tix i{font-style:normal;font:600 26px/1 "BC",sans-serif;color:var(--ac)}.west .tix{background:#141414}.east .tix{background:#fff8}.tixrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:34px}.tixrow a{display:block;text-align:center;padding:16px 10px;border-radius:999px;text-decoration:none;font:600 17px/1 "BC",sans-serif;letter-spacing:.12em;text-transform:uppercase}.tixrow .w{background:#FF4FA3;color:#111}.tixrow .e{background:#E8E1CC;color:#2F3A2E}/*mobile-pass*/
+body.west,body.east{background:#EAD8C3;color:#151515;--mut:#6b6153;--line:rgba(21,21,21,.15);font-family:"Space Mono",monospace}
+body.west{--ac:#ED3D7E}body.east{--ac:#2a2620}
+.tbar{padding-top:max(10px,env(safe-area-inset-top))}
+.tbar.w{background:#ED3D7E;box-shadow:none;border-bottom:2px solid #151515}
+.tbar.e{background:#939C87;border-left:0;border-bottom:2px solid #151515}
+.tbar .bk{min-height:44px;color:#151515}
+.tbar.w .bk,.tbar.e .bk{font:700 18px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.tbar .sw,.tbar.w .sw,.tbar.e .sw{background:rgba(21,21,21,.85);border-radius:999px}
+.tbar .sw a{min-height:44px;font:600 15px/1 "Barlow Condensed",sans-serif!important;letter-spacing:.16em}
+.tbar.w .sw a.on{background:#F4BB05;color:#151515}
+.tbar.e .sw a{color:#EAD8C3;border-radius:999px}.tbar.e .sw a.on{background:#F4BB05;color:#151515}
+.wrap{padding-bottom:max(60px,calc(env(safe-area-inset-bottom) + 40px))}
+h1,.west h1,.east h1{color:#151515!important;font:700 clamp(44px,13vw,68px)/.92 "Barlow Condensed",sans-serif}
+.tag,.east .tag{font:400 13px/1.5 "Space Mono",monospace!important;letter-spacing:.08em;color:#4a4238}
+.vid{border-radius:14px;box-shadow:0 14px 30px rgba(70,45,20,.35)}
+.seg a{border-color:#151515;color:#151515;font-family:"Barlow Condensed",sans-serif;min-height:48px;display:flex;align-items:center;justify-content:center}
+.seg a.on,.east .seg a.on{background:#F4BB05;border-color:#F4BB05;color:#151515}
+.read h2{color:#151515;font-family:"Barlow Condensed",sans-serif;font-weight:700}
+.read p,.east .read p{color:#2a2620;font-size:17px}
+.credit{color:#6b6153;border-color:rgba(21,21,21,.15);font-size:13px}
+.sb,.west .sb,.east .sb{background:#e1c8ae;border:0;border-radius:14px;box-shadow:0 10px 24px rgba(70,45,20,.3);position:relative;overflow:hidden}
+.east .sb{background:#c3bda6}
+.sb::after{content:"";position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");mix-blend-mode:multiply;opacity:.3}
+.sb h3{color:#151515;font-family:"Barlow Condensed",sans-serif;font-weight:700}
+.sb p,.east .sb p{color:#2a2620;font-family:"Space Mono",monospace;font-size:14px}
+.sb .btn,.west .sb .btn,.east .sb .btn{position:relative;z-index:1;border-radius:999px;background:#F4BB05;color:#151515;border:0;font:600 18px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;min-height:52px}
+.sb .btn.ghost,.west .sb .btn.ghost,.east .sb .btn.ghost{background:transparent;color:#151515;border:1.5px solid #151515}
+.stm .stc,.west .stm .stc,.east .stm .stc{background:#EAD8C3;color:#151515;border:0;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.stm h2,.west .stm h2,.east .stm h2{font:700 34px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.stm p,.east .stm p{font-family:"Space Mono",monospace;font-size:14px}
+.stm .ready,.west .stm .ready,.east .stm .ready{background:#F4BB05;color:#151515;border:0;border-radius:12px;font:700 16px/1.3 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:none}
+.stm .acts a,.stm .acts button,.west .stm .acts *,.east .stm .acts *{min-height:52px;border-radius:999px!important;border:1.5px solid #151515!important;background:transparent!important;color:#151515!important;font:600 17px/1 "Barlow Condensed",sans-serif!important;letter-spacing:.12em;text-transform:uppercase}
+.stm .acts .pri,.west .stm .acts .pri,.east .stm .acts .pri{background:#F4BB05!important;border-color:#F4BB05!important}
+.stm .tap{font-size:12px}
+</style><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@500&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@700&display=swap" rel="stylesheet"></head><body data-pid="bach" class="west"><!--bar--><nav class="tbar w"><a class="bk" href="./">← Back</a><div class="sw" aria-label="Ticket"><a href="ticket#bach" class="on">WEST</a><a href="ticket#east" class="">OST</a></div></nav>
 <div class="wrap">
 <h1>Elvira Bach</h1>
 <div class="tag">German painter · Berlin · Women, self-portraits, glass</div>
 <video class="vid" id="v" controls playsinline preload="metadata" poster="bach.jpg"><source src="bach.mp4" type="video/mp4"></video>
 <div class="seg"><a href="#v" class="on">▶ Watch · 1:18</a><a href="#read">☰ Read</a></div>
 <section class="read" id="read"><h2>The story</h2><p>Elvira Bach, a German painter from Berlin. Her one theme: women and femininity. Look closely and you notice that all the faces she paints look alike. That is not a coincidence. They are, in essence, self-portraits.</p><p>Bright, loud female figures: she painted them especially since the late 1990s. Critics called it too repetitive, too decorative. Her answer, again and again: I painted my life. I always started from myself.</p><p>Her best-known series is the kitchen divas. An art historian describes such a heroine like this: a deep neckline, stiletto heels, and a cigarette in a strawberry mouth.</p><p>She doesn&#x27;t only paint. She makes bronze sculptures, ceramics, and sculptures in Murano glass. And the glass has a story: she began her path as a glassblower&#x27;s apprentice. The material she started with came back to her.</p><p>In 2025, Galerie Friese in Berlin showed So rot, so rot. The focus was on early works from the 1970s and 80s, plus new ceramics made in the summer of 2025. Softer, less poster-like than what we link to her name today.</p></section>
-<div class="credit">Artworks and photographs © their respective authors, shown for educational purposes in the exhibition.</div>
-</div></body></html>
+<!--stampbox--><section class="sb" id="sb" aria-live="polite"></section><div class="credit">Artworks and photographs © their respective authors, shown for educational purposes in the exhibition.</div>
+</div><script>{const b=document.querySelector(".tbar .bk");b.addEventListener("click",e=>{try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){e.preventDefault();history.back()}}catch(x){}})}</script><script>{window.showStm=function(S){
+const page=document.body.dataset.pid,W=document.body.classList.contains("west"),side=W?"west":"east";
+const set={"west": ["noir", "bach", "fetting"], "east": ["kafka", "marquardt", "ciurlionis"]}[side]||[],done=set.length&&set.every(id=>S.st&&S.st[id]);
+const name=(document.querySelector("h1")||{}).textContent||"";
+const t=W?{h:"STAMPED!",p:name+" is now in your ticket.",ready:"All stamps collected — you're ready to cross to the other side!",w:"▶ Keep watching",r:"☰ Read the story",b:"← Back to my ticket",go:"Cross the Wall → my ticket",tap:"Tap anywhere to keep watching"}
+ :{h:"GESTEMPELT",p:name+" steht jetzt in Ihrem Passierschein.",ready:"Alle Stempel gesammelt — Sie können auf die andere Seite.",w:"▶ Weiter ansehen",r:"☰ Geschichte lesen",b:"← Zurück zum Passierschein",go:"Über die Mauer → Passierschein",tap:"Tippen zum Weiterschauen"};
+const o=document.createElement("div");o.className="stm";o.setAttribute("role","dialog");
+o.innerHTML=`<div class="stc">${document.querySelector("#sb svg")?document.querySelector("#sb svg").outerHTML:""}<h2>${t.h}</h2><p>${t.p}</p>${done?`<div class="ready">${t.ready}</div>`:""}
+<div class="acts">${done?`<a class="pri" href="ticket#${W?"east":"west"}">${t.go}</a>`:""}<button data-k="w" class="${done?"":"pri"}">${t.w}</button><button data-k="r">${t.r}</button><a href="ticket#${page}">${t.b}</a></div><div class="tap">${t.tap}</div></div>`;
+document.body.appendChild(o);
+const v=document.getElementById("v");
+const close=k=>{o.remove();if(k==="r"){const r=document.getElementById("read");if(r)r.scrollIntoView({behavior:"smooth"})}else if(v){if(v.ended)v.currentTime=0;const p=v.play();if(p&&p.catch)p.catch(()=>{})}};
+o.addEventListener("click",e=>{const b=e.target.closest("button");if(b){close(b.dataset.k);return}if(!e.target.closest("a")&&!e.target.closest(".stc"))close("w")});
+}}</script><!--v4--><script>{
+const ID="bach",SIDE="west",INI="EB",W=SIDE==="west";
+const T=W?{h:"Your stamp",p:"Watch the film to the end — the stamp appears by itself.",or:"Reading the story instead?",self:"Stamp it myself",done:"Stamped ✓ in your West ticket",open:"Open my ticket →"}
+ :{h:"Ihr Stempel",p:"Film bis zum Ende ansehen — der Stempel erscheint von selbst.",or:"Lieber die Geschichte gelesen?",self:"Selbst stempeln",done:"Gestempelt ✓ im Passierschein",open:"Zum Passierschein →"};
+function load(){try{return JSON.parse(localStorage.getItem("tix2")||"null")}catch(e){return null}}
+function rough(r,seed){let p="",x=seed;for(let i=0;i<72;i++){x=(x*9301+49297)%233280;const rr=r+(x/233280-.5)*4,a=i/72*Math.PI*2;p+=(i?"L":"M")+(rr*Math.cos(a)).toFixed(1)+" "+(rr*Math.sin(a)).toFixed(1)}return p+"Z"}
+function svg(cls){return W?`<svg class="${cls}" viewBox="-100 -100 200 200"><g opacity=".92" transform="rotate(-12)"><path d="${rough(88,7)}" fill="none" stroke="#FF4FA3" stroke-width="8"/><path d="${rough(70,3)}" fill="none" stroke="#FF4FA3" stroke-width="2"/><text y="-36" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="14" fill="#FF4FA3">WEST BERLIN</text><text y="18" text-anchor="middle" font-family="Permanent Marker" font-size="48" fill="#FF4FA3">${INI}</text><text y="50" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="13" fill="#FF4FA3">CHECKED ✓</text></g></svg>`
+ :`<svg class="${cls}" viewBox="-100 -100 200 200"><g opacity=".9" transform="rotate(8)"><rect x="-86" y="-86" width="172" height="172" rx="10" fill="none" stroke="#C2272D" stroke-width="5"/><rect x="-74" y="-74" width="148" height="148" rx="4" fill="none" stroke="#C2272D" stroke-width="1.6"/><text y="-40" text-anchor="middle" font-family="BC,Barlow Condensed" font-weight="600" font-size="20" fill="#C2272D" letter-spacing="2">KONTROLLIERT</text><text y="20" text-anchor="middle" font-family="BC,Barlow Condensed" font-weight="600" font-size="50" fill="#C2272D">${INI}</text><text y="56" text-anchor="middle" font-family="BC,Barlow Condensed" font-weight="600" font-size="17" fill="#C2272D" letter-spacing="2">BERLIN (OST)</text></g></svg>`}
+const box=document.getElementById("sb");
+function draw(){const S=load(),st=S&&S.st&&S.st[ID];box.classList.toggle("done",!!st);
+ box.innerHTML=st?`<h3>${T.h}</h3>${svg("st")}<p>${T.done}</p><a class="btn" href="ticket#${ID}">${T.open}</a>`
+ :`<h3>${T.h}</h3><p>${T.p}</p><p class="or">${T.or}</p><button class="btn ghost" id="selfSt">${T.self}</button>`;
+ const b=document.getElementById("selfSt");if(b)b.addEventListener("click",()=>give(false));}
+function give(fx){let S=load();if(!S)S={side:SIDE,name:"",st:{},no:"A "+String(100000+Math.floor(Math.random()*899999))};
+ S.st=S.st||{};if(S.st[ID])return;S.st[ID]=true;try{localStorage.setItem("tix2",JSON.stringify(S))}catch(e){}
+ draw();showStm(S);
+ draw();}
+draw();
+const v=document.getElementById("v");
+if(v){v.addEventListener("ended",()=>give(true));
+ v.addEventListener("timeupdate",()=>{if(v.duration&&v.currentTime/v.duration>=.95)give(true)});
+ if(location.hash==="#v"){setTimeout(()=>{v.scrollIntoView({block:"center"});const p=v.play();if(p&&p.catch)p.catch(()=>{})},200)}}
+window.addEventListener("pageshow",e=>{if(e.persisted)draw()});
+}</script></body></html>
